@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/astr0-4/jokes-bot/issues"
   },
-  "homepage": "https://github.com/astr0-4/jokes-bot#readme"
+  "homepage": "https://github.com/astr0-4/jokes-bot#readme",
+  "dependencies": {
+    "slackbots": "^1.0.2"
+  }
 }

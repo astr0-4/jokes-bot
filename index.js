@@ -1,4 +1,6 @@
 var SlackBot = require("slackbots")
+var request = require("request")
+var endpoint = "https://icanhazdadjoke.com/"
 
 const envKey = process.env.JOKES_BOT_TOKEN
 
@@ -7,26 +9,25 @@ var bot = new SlackBot({
   token: envKey,
   name: "Jokes Bot"
 })
+postMessage = message => {
+  return bot.postMessageToUser("alex", message, params)
+}
 
+getRandomJoke = callback => {
+  return request("https://icanhazdadjoke.com/", (error, response) => {
+    if (error) {
+      console.log("Error: ", error)
+    } else {
+      const joke = JSON.parse(response.body)
+      console.log(joke)
+      return callback(joke)
+    }
+  })
+}
 bot.on("start", function() {
   // more information about additional params https://api.slack.com/methods/chat.postMessage
   var params = {
-    icon_emoji: ":laughing:"
+    icon_emoji: ":joy:"
   }
-
-  // define channel, where bot exist. You can adjust it there https://my.slack.com/services
-  bot.postMessageToChannel("general", "meow!", params)
-
-  // define existing username instead of 'user_name'
-  bot.postMessageToUser("user_name", "meow!", params)
-
-  // If you add a 'slackbot' property,
-  // you will post to another user's slackbot channel instead of a direct message
-  bot.postMessageToUser("user_name", "meow!", {
-    slackbot: true,
-    icon_emoji: ":cat:"
-  })
-
-  // define private group instead of 'private_group', where bot exist
-  bot.postMessageToGroup("private_group", "meow!", params)
+  getRandomJoke(postMessage)
 })
